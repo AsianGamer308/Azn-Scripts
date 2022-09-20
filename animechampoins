@@ -1,0 +1,28 @@
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/lime"))()
+local w = Library:Window("AC by Azn")
+w:Toggle("auto atk", function(f)
+getgenv().e = f
+while getgenv().e do
+task.wait(.01)
+game:GetService("ReplicatedStorage").Remotes.Attack:FireServer(game:GetService("Players").LocalPlayer.Character)
+end
+end)
+
+w:Toggle("auto tp", function(s)
+getgenv().j = s
+while getgenv(.1).j do
+task.wait() 
+for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+    task.wait(.3) -- make it longer if it doesnt finish the enemies
+   if v:FindFirstChild("HumanoidRootPart") then
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
+end
+end
+end
+end)
+while true do task.wait()
+    pcall(function()
+game.Players.LocalPlayer.Character.Head.HealthBar:Destroy() --name hider
+end)
+end
