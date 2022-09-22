@@ -1,11 +1,13 @@
-
+-- made by Azn
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/lime"))()
 local w = Library:Window("AC by Azn")
 w:Toggle("auto atk", function(f)
 getgenv().e = f
 while getgenv().e do
 task.wait(.01)
+for i = 1, 4 do -- change 4 to lower number if you lag
 game:GetService("ReplicatedStorage").Remotes.Attack:FireServer(game:GetService("Players").LocalPlayer.Character)
+end
 end
 end)
 
