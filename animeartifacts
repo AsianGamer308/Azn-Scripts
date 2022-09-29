@@ -1,0 +1,122 @@
+-- please give credits if sharing
+local player = game.Players.LocalPlayer
+local id = player.CharacterAppearanceId
+local place
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Anime Artifacts Simulator 2 script by Azn", "DarkTheme")
+local Tab = Window:NewTab("Main")
+local Section = Tab:NewSection("AutoFarm")
+local selectedarea;
+Section:NewDropdown("Pick area to autoatk", "Pick Area to farm", {"area1", "area2", "area3","area4", "area5", "area6", "area7","area8", "area9", "area10", "area11", "area12"}, function(value)
+    selectedarea = value;
+    if value == "area1" then
+        place = workspace.Monsters.stage001
+    elseif value == "area2" then
+        place = workspace.Monsters.stage002
+    elseif value == "area3" then
+        place = workspace.Monsters.stage003
+    elseif value == "area4" then
+        place = workspace.Monsters.stage004
+    elseif value == "area5" then
+        place = workspace.Monsters.stage005
+    elseif value == "area6" then
+        place = workspace.Monsters.stage006
+    elseif value == "area7" then
+        place = workspace.Monsters.stage007
+    elseif value == "area8" then
+        place = workspace.Monsters.stage008
+    elseif value == "area9" then
+        place = workspace.Monsters.stage009
+    elseif value == "area10" then
+        place = workspace.Monsters.stage010
+    elseif value == "area11" then
+        place = workspace.Monsters.stage011
+    elseif value == "area12" then
+        place = workspace.Monsters.stage012
+end
+end)
+
+Section:NewToggle("autoatk selected area", "ToggleInfo", function(value)
+    if selectedarea then
+    getgenv().ok = value
+while getgenv().ok do
+task.wait()
+pcall(function()
+for i,v in next, place:GetChildren() do
+    task.wait()
+game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
+end
+end)
+end
+end
+end)
+Section:NewToggle("Infinity City AutoAtk", "ToggleInfo", function(value)
+getgenv().s = value
+while getgenv().s do
+    task.wait()
+    pcall(function()
+for i, v in pairs(game:GetService("Workspace"):GetChildren()) do
+ if string.find(v.Name,"monster") then
+     for i = 1, 5 do
+game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
+end
+end
+end
+end)
+end
+end)
+
+Section:NewToggle("Boss AutoAtk", "Auto attacks the boss", function(value)
+getgenv().g = value
+while getgenv().g do
+task.wait()
+pcall(function()
+for i,v in next, game:GetService("Workspace")["FightArea_" .. id]:GetChildren() do
+     if string.find(v.Name,"monster") then
+              for i = 1, 5 do
+game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
+end
+end
+end
+end)
+end
+end)
+
+
+
+local Tab2 = Window:NewTab("Misc")
+local Section2 = Tab2:NewSection("Misc")
+Section2:NewSlider("Speed", "SliderInfo", 100, 15, function(s) -- 500 (MaxValue) | 0 (MinValue)
+    player.Character.Humanoid.WalkSpeed = s
+end)
+Section2:NewToggle("Auto Pickup Skills", "picks up skill when is dropped", function(value)
+getgenv().pi = value
+while getgenv().pi do
+    task.wait(.5)
+    pcall(function()
+        workspace.Monsters.Part.PickUpSkillBall:FireServer()
+end)
+end
+end)
+
+Section2:NewToggle("auto best weapon", "equips best weapon", function(value)
+getgenv().m = value
+while getgenv().m do
+    task.wait(1)
+game:GetService("ReplicatedStorage").Events.AutoMaxDmg:FireServer()
+end
+end)
+
+local world = {}
+for i,v in pairs(game:GetService("Workspace").Worlds:GetChildren()) do
+   table.insert(world,v.Name)
+   table.sort(world)
+end
+
+Section2:NewDropdown("Teleport ","Pick world to Tp to", world, function(value)
+  player.Character.HumanoidRootPart.CFrame = Workspace.Worlds[value].CFrame*CFrame.new(0,20,0)
+end)
+
+Section2:NewKeybind("KeybindText", "KeybindInfo", Enum.KeyCode.F, function()
+	Library:ToggleUI()
+end)
