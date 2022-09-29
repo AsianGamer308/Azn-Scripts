@@ -2,7 +2,7 @@ local player = game.Players.LocalPlayer
 local id = player.CharacterAppearanceId
 local place
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Anime Artifacts Simulator 2", "DarkTheme")
+local Window = Library.CreateLib("Anime Artifacts Simulator 2 script by Azn", "DarkTheme")
 local Tab = Window:NewTab("Main")
 local Section = Tab:NewSection("AutoFarm")
 local selectedarea;
