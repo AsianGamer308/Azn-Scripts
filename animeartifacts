@@ -1,9 +1,8 @@
--- please give credits if sharing
 local player = game.Players.LocalPlayer
 local id = player.CharacterAppearanceId
 local place
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Anime Artifacts Simulator 2 script by Azn", "DarkTheme")
+local Window = Library.CreateLib("Anime Artifacts Simulator 2", "DarkTheme")
 local Tab = Window:NewTab("Main")
 local Section = Tab:NewSection("AutoFarm")
 local selectedarea;
@@ -36,7 +35,21 @@ Section:NewDropdown("Pick area to autoatk", "Pick Area to farm", {"area1", "area
 end
 end)
 
-Section:NewToggle("autoatk selected area", "ToggleInfo", function(value)
+Section:NewToggle("autoatk selected area laggy", "ToggleInfo", function(value)
+    if selectedarea then
+    getgenv().fas = value
+while getgenv().fas do
+task.wait()
+pcall(function()
+for i,v in next, place:GetChildren() do
+game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
+end
+end)
+end
+end
+end)
+
+Section:NewToggle("autoatk selected area no lag", "ToggleInfo", function(value)
     if selectedarea then
     getgenv().ok = value
 while getgenv().ok do
