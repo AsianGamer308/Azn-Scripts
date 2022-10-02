@@ -1,5 +1,7 @@
+--made by azn scripts
 local player = game.Players.LocalPlayer
 local id = player.CharacterAppearanceId
+local chest 
 local place
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("Anime Artifacts Simulator 2 script by Azn", "DarkTheme")
@@ -128,7 +130,18 @@ end)
 
 local Tab2 = Window:NewTab("Misc")
 local Section2 = Tab2:NewSection("Misc")
-Section2:NewSlider("Speed", "SliderInfo", 100, 15, function(s) -- 500 (MaxValue) | 0 (MinValue)
+
+local selectedchest;
+Section2:NewDropdown("Chest Opener", "Pick Chest to open", {"draw001", "draw002", "draw003","draw004", "draw005", "draw006", "draw007","draw008", "draw009", "draw010", "draw011", "draw012"}, function(value)
+    selectedchest = value;
+end)
+Section2:NewButton("Click to Open Selected Chest", "opens the chest u selected", function()
+for i = 1, 100 do
+game:GetService("ReplicatedStorage").Events.UIEvents.DrawWeapon:FireServer(selectedchest,"E")
+end
+end)
+
+Section2:NewSlider("Speed", "SliderInfo", 100, 15, function(s)
     player.Character.Humanoid.WalkSpeed = s
 end)
 Section2:NewToggle("auto collect boss drop", "collects boss drop", function(value)
@@ -173,6 +186,10 @@ Section2:NewDropdown("Teleport ","Pick world to Tp to", world, function(value)
   player.Character.HumanoidRootPart.CFrame = Workspace.Worlds[value].CFrame*CFrame.new(0,20,0)
 end)
 
-Section2:NewKeybind("KeybindText", "KeybindInfo", Enum.KeyCode.F, function()
+local Tab3 = Window:NewTab("Credits")
+local Section3 = Tab3:NewSection("Credits")
+Section3:NewLabel("Script By Azn")
+Section3:NewLabel("UI by xHeptc")
+Section3:NewKeybind("KeybindText", "KeybindInfo", Enum.KeyCode.F, function()
 	Library:ToggleUI()
 end)
