@@ -66,12 +66,14 @@ end)
 Section:NewToggle("Infinity City AutoAtk", "ToggleInfo", function(value)
 getgenv().s = value
 while getgenv().s do
-    task.wait()
+    task.wait(.01)
     pcall(function()
 for i, v in pairs(game:GetService("Workspace"):GetChildren()) do
  if string.find(v.Name,"monster") then
+         if (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 100 then
      for i = 1, 5 do
 game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
+end
 end
 end
 end
@@ -95,6 +97,33 @@ end)
 end
 end)
 
+Section:NewToggle("autoatk for waves", "ToggleInfo", function(value)
+    getgenv().mode = value
+while getgenv().mode do
+task.wait()
+pcall(function()
+for i, v in pairs(game:GetService("Workspace").CopybookFolder:GetChildren()) do
+ if string.find(v.Name,"monster") then
+     game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
+end
+end
+end)
+end
+end)
+
+Section:NewToggle("autoatk for waves boss", "ToggleInfo", function(value)
+    getgenv().mode = value
+while getgenv().mode do
+task.wait()
+pcall(function()
+for i, v in pairs(game:GetService("Workspace").Monsters:GetChildren()) do
+ if string.find(v.Name,"monster") then
+     game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
+end
+end
+end)
+end
+end)
 
 
 local Tab2 = Window:NewTab("Misc")
@@ -102,6 +131,20 @@ local Section2 = Tab2:NewSection("Misc")
 Section2:NewSlider("Speed", "SliderInfo", 100, 15, function(s) -- 500 (MaxValue) | 0 (MinValue)
     player.Character.Humanoid.WalkSpeed = s
 end)
+Section2:NewToggle("auto collect boss drop", "collects boss drop", function(value)
+getgenv().col = value
+while getgenv().col do
+    task.wait(.5)
+    pcall(function()
+        for i, v in pairs(game:GetService("Workspace")["FightArea_" .. id].TreasureChest:GetChildren()) do
+ if string.find(v.Name,"BOSS") then
+fireclickdetector(v.ClickDetector)
+end
+end
+end)
+end
+end)
+
 Section2:NewToggle("Auto Pickup Skills", "picks up skill when is dropped", function(value)
 getgenv().pi = value
 while getgenv().pi do
