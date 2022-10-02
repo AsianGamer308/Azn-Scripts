@@ -51,6 +51,30 @@ end
 end
 end)
 
+Section:NewToggle("autoatk selected with skills", "usages skills so does more dmg", function(value)
+    if selectedarea then
+    getgenv().skil = value
+while getgenv().skil do
+task.wait()
+pcall(function()
+for _,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do 
+    if v.ClassName == "Model" then
+        for _,s in pairs(place:GetChildren()) do 
+            wait()
+local args = {
+    [1] = s,
+    [2] = game:GetService("Players").LocalPlayer,
+    [3] = v.Name
+}
+game:GetService("ReplicatedStorage").Events.SkillDmg:FireServer(unpack(args))
+end
+end
+end
+end)
+end
+end
+end)
+
 Section:NewToggle("autoatk selected area no lag", "ToggleInfo", function(value)
     if selectedarea then
     getgenv().ok = value
