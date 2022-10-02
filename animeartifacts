@@ -57,13 +57,13 @@ Section:NewToggle("autoatk selected with skills", "usages skills so does more dm
 while getgenv().skil do
 task.wait()
 pcall(function()
-for _,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do 
+for _,v in pairs(player.Character:GetChildren()) do 
     if v.ClassName == "Model" then
+        wait()
         for _,s in pairs(place:GetChildren()) do 
-            wait()
 local args = {
     [1] = s,
-    [2] = game:GetService("Players").LocalPlayer,
+    [2] = player,
     [3] = v.Name
 }
 game:GetService("ReplicatedStorage").Events.SkillDmg:FireServer(unpack(args))
@@ -96,7 +96,7 @@ while getgenv().s do
     pcall(function()
 for i, v in pairs(game:GetService("Workspace"):GetChildren()) do
  if string.find(v.Name,"monster") then
-         if (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 100 then
+         if (v.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 100 then
      for i = 1, 5 do
 game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
 end
