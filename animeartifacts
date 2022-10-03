@@ -6,53 +6,11 @@ local place
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("Anime Artifacts Simulator 2 script by Azn", "DarkTheme")
 local Tab = Window:NewTab("Main")
-local Section = Tab:NewSection("AutoFarm")
-local selectedarea;
-Section:NewDropdown("Pick area to autoatk", "Pick Area to farm", {"area1", "area2", "area3","area4", "area5", "area6", "area7","area8", "area9", "area10", "area11", "area12"}, function(value)
-    selectedarea = value;
-    if value == "area1" then
-        place = workspace.Monsters.stage001
-    elseif value == "area2" then
-        place = workspace.Monsters.stage002
-    elseif value == "area3" then
-        place = workspace.Monsters.stage003
-    elseif value == "area4" then
-        place = workspace.Monsters.stage004
-    elseif value == "area5" then
-        place = workspace.Monsters.stage005
-    elseif value == "area6" then
-        place = workspace.Monsters.stage006
-    elseif value == "area7" then
-        place = workspace.Monsters.stage007
-    elseif value == "area8" then
-        place = workspace.Monsters.stage008
-    elseif value == "area9" then
-        place = workspace.Monsters.stage009
-    elseif value == "area10" then
-        place = workspace.Monsters.stage010
-    elseif value == "area11" then
-        place = workspace.Monsters.stage011
-    elseif value == "area12" then
-        place = workspace.Monsters.stage012
-end
-end)
+local Section = Tab:NewSection("AutoFarm Requires sword with skill")
 
-Section:NewToggle("autoatk selected area laggy", "ToggleInfo", function(value)
-    if selectedarea then
-    getgenv().fas = value
-while getgenv().fas do
-task.wait()
-pcall(function()
-for i,v in next, place:GetChildren() do
-game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
-end
-end)
-end
-end
-end)
 
-Section:NewToggle("autoatk selected with skills", "usages skills so does more dmg", function(value)
-    if selectedarea then
+
+Section:NewToggle("Kill aura", "usages skills so does more dmg", function(value)
     getgenv().skil = value
 while getgenv().skil do
 task.wait()
@@ -60,7 +18,8 @@ pcall(function()
 for _,v in pairs(player.Character:GetChildren()) do 
     if v.ClassName == "Model" then
         wait()
-        for _,s in pairs(place:GetChildren()) do 
+        for _,s in pairs(game:GetService("Workspace").Monsters[player.Stage.Value]:GetChildren()) do 
+ if string.find(s.Name,"monster") then
 local args = {
     [1] = s,
     [2] = player,
@@ -70,25 +29,12 @@ game:GetService("ReplicatedStorage").Events.SkillDmg:FireServer(unpack(args))
 end
 end
 end
-end)
 end
+end)
 end
 end)
 
-Section:NewToggle("autoatk selected area no lag", "ToggleInfo", function(value)
-    if selectedarea then
-    getgenv().ok = value
-while getgenv().ok do
-task.wait()
-pcall(function()
-for i,v in next, place:GetChildren() do
-    task.wait()
-game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
-end
-end)
-end
-end
-end)
+
 Section:NewToggle("Infinity City AutoAtk", "ToggleInfo", function(value)
 getgenv().s = value
 while getgenv().s do
@@ -97,25 +43,18 @@ while getgenv().s do
 for i, v in pairs(game:GetService("Workspace"):GetChildren()) do
  if string.find(v.Name,"monster") then
          if (v.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 100 then
-     for i = 1, 5 do
-game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
+         for _,z in pairs(player.Character:GetChildren()) do 
+             for i = 1, 5 do
+    if z.ClassName == "Model" then
+local args = {
+    [1] = v,
+    [2] = player,
+    [3] = z.Name
+}
+game:GetService("ReplicatedStorage").Events.SkillDmg:FireServer(unpack(args))
 end
 end
 end
-end
-end)
-end
-end)
-
-Section:NewToggle("Boss AutoAtk", "Auto attacks the boss", function(value)
-getgenv().g = value
-while getgenv().g do
-task.wait()
-pcall(function()
-for i,v in next, game:GetService("Workspace")["FightArea_" .. id]:GetChildren() do
-     if string.find(v.Name,"monster") then
-              for i = 1, 5 do
-game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
 end
 end
 end
@@ -123,33 +62,6 @@ end)
 end
 end)
 
-Section:NewToggle("autoatk for waves", "ToggleInfo", function(value)
-    getgenv().mode = value
-while getgenv().mode do
-task.wait()
-pcall(function()
-for i, v in pairs(game:GetService("Workspace").CopybookFolder:GetChildren()) do
- if string.find(v.Name,"monster") then
-     game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
-end
-end
-end)
-end
-end)
-
-Section:NewToggle("autoatk for waves boss", "ToggleInfo", function(value)
-    getgenv().mode = value
-while getgenv().mode do
-task.wait()
-pcall(function()
-for i, v in pairs(game:GetService("Workspace").Monsters:GetChildren()) do
- if string.find(v.Name,"monster") then
-     game:GetService("ReplicatedStorage").Events.DmgEvent:FireServer(v)
-end
-end
-end)
-end
-end)
 
 
 local Tab2 = Window:NewTab("Misc")
@@ -160,27 +72,13 @@ Section2:NewDropdown("Chest Opener", "Pick Chest to open", {"draw001", "draw002"
     selectedchest = value;
 end)
 Section2:NewButton("Click to Open Selected Chest", "opens the chest u selected", function()
-for i = 1, 100 do
 game:GetService("ReplicatedStorage").Events.UIEvents.DrawWeapon:FireServer(selectedchest,"E")
-end
 end)
 
 Section2:NewSlider("Speed", "SliderInfo", 100, 15, function(s)
     player.Character.Humanoid.WalkSpeed = s
 end)
-Section2:NewToggle("auto collect boss drop", "collects boss drop", function(value)
-getgenv().col = value
-while getgenv().col do
-    task.wait(.5)
-    pcall(function()
-        for i, v in pairs(game:GetService("Workspace")["FightArea_" .. id].TreasureChest:GetChildren()) do
- if string.find(v.Name,"BOSS") then
-fireclickdetector(v.ClickDetector)
-end
-end
-end)
-end
-end)
+
 
 Section2:NewToggle("Auto Pickup Skills", "picks up skill when is dropped", function(value)
 getgenv().pi = value
