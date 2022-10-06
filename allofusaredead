@@ -1,0 +1,97 @@
+-- silent aim is not by me I just removed a line so it kills everything in the map
+local EnemiesFolder = workspace.Enemies
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local Mouse = Player:GetMouse()
+local RunService = game:GetService("RunService")
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/lime"))()
+local w = Library:Window("Main")
+
+w:Button("silentaim", function()
+local GetClosestToCursor = function()
+   local closestDistance = math.huge
+   local closestEnemy = nil
+
+   for _, enemy in pairs(EnemiesFolder:GetChildren()) do
+       if not enemy:FindFirstChild("Head") then continue end
+       if not enemy:FindFirstChildOfClass("Humanoid") then continue end
+       if enemy.Humanoid.Health <= 0 then continue end
+
+       local screenPos, visible = workspace.CurrentCamera:WorldToViewportPoint(enemy.Head.Position)
+       local distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+       if distance < closestDistance then
+           closestEnemy = enemy
+           closestDistance = distance
+       end
+   end
+
+   return closestEnemy
+end
+local ClosestEnemy = GetClosestToCursor()
+RunService.Stepped:Connect(function(time, deltaTime)
+   ClosestEnemy = GetClosestToCursor()
+end)
+local old; old = hookmetamethod(game, '__namecall', function(this, ...)
+  local args = {...}
+  local method = getnamecallmethod()
+
+  if not checkcaller() and method == 'FireServer' and this.Name == "WeaponHit" then
+       if ClosestEnemy then
+           args[2].part = ClosestEnemy.Head
+       end
+   end
+
+  return old(this, unpack(args))
+end)
+end)
+
+w:Toggle("safetp", function(value)
+getgenv().safe = value
+while getgenv().safe do
+task.wait()
+    pcall(function()
+       for i, v in pairs(EnemiesFolder:GetChildren()) do
+       if v ~= game.Players.LocalPlayer.Character then
+    if (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 40 then
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame*CFrame.new(0,20,10)
+end
+end
+end
+end)
+end
+end)
+
+
+w:Toggle("mod", function(value)
+getgenv().m = value
+while getgenv().m do
+task.wait()
+    pcall(function()
+        for _,v in pairs(Player.Character:GetChildren()) do 
+    if v.ClassName == "Tool" then
+    v.CurrentAmmo.Value = 1000
+    v.Configuration.ShotCooldown.Value = 0
+    v.Configuration.BulletSpeed.Value = 1000000
+    v.Configuration.MaxSpread.Value = 0
+end
+end
+end)
+end
+end)
+
+w:Toggle("modv2", function(value)
+getgenv().m2 = value
+while getgenv().m2 do
+task.wait()
+    pcall(function()
+        for _,v in pairs(Player.Character:GetChildren()) do 
+    if v.ClassName == "Tool" then
+            v.Configuration.RecoilMax.Value = 0
+            v.Configuration.RecoilMin.Value = 0
+            v.Configuration.HitDamage.Value = math.huge
+            end
+end
+end)
+end
+end)
