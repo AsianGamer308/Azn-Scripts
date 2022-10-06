@@ -1,8 +1,10 @@
 --made by azn scripts
+
 local player = game.Players.LocalPlayer
 local id = player.CharacterAppearanceId
 local chest 
 local place
+local sid = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Model").Name
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
 local Window = Library.CreateLib("Anime Artifacts Simulator 2 script by Azn", "DarkTheme")
 local Tab = Window:NewTab("Main")
@@ -15,20 +17,14 @@ Section:NewToggle("Kill aura", "usages skills so does more dmg", function(value)
 while getgenv().skil do
 task.wait()
 pcall(function()
-for _,v in pairs(player.Character:GetChildren()) do 
-    if v.ClassName == "Model" then
         wait()
         for _,s in pairs(game:GetService("Workspace").Monsters[player.Stage.Value]:GetChildren()) do 
- if string.find(s.Name,"monster") then
 local args = {
     [1] = s,
     [2] = player,
-    [3] = v.Name
+    [3] = sid
 }
 game:GetService("ReplicatedStorage").Events.SkillDmg:FireServer(unpack(args))
-end
-end
-end
 end
 end)
 end
@@ -43,18 +39,35 @@ while getgenv().s do
 for i, v in pairs(game:GetService("Workspace"):GetChildren()) do
  if string.find(v.Name,"monster") then
          if (v.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 100 then
-         for _,z in pairs(player.Character:GetChildren()) do 
              for i = 1, 5 do
-    if z.ClassName == "Model" then
 local args = {
     [1] = v,
     [2] = player,
-    [3] = z.Name
+    [3] = sid
 }
 game:GetService("ReplicatedStorage").Events.SkillDmg:FireServer(unpack(args))
 end
 end
 end
+end
+end)
+end
+end)
+
+Section:NewToggle("Boss AutoAtk", "Auto attacks the boss", function(value)
+getgenv().g = value
+while getgenv().g do
+task.wait()
+pcall(function()
+for i,v in next, game:GetService("Workspace")["FightArea_" .. id]:GetChildren() do
+     if string.find(v.Name,"monster") then
+              for i = 1, 5 do
+local args = {
+    [1] = v,
+    [2] = player,
+    [3] = sid
+}
+game:GetService("ReplicatedStorage").Events.SkillDmg:FireServer(unpack(args))
 end
 end
 end
