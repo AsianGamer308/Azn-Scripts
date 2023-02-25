@@ -1,0 +1,108 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/lime"))()
+local w = Library:Window("Main")
+local player = game.Players.LocalPlayer
+local playerplace = player.leaderstats.Island.Value
+local xd = nil
+local killAuraEnabled = false
+local killAura2Enabled = false
+local killAura3Enabled = false
+local autoSellEnabled = false
+
+local function setXd()
+    if playerplace == 1 then
+        xd = game.Workspace.Monsters.OnePiece
+    elseif playerplace == 2 then
+        xd = game.Workspace.Monsters.DemonSlayer
+    elseif playerplace == 3 then
+        xd = game.Workspace.Monsters.Naruto
+    elseif playerplace == 4 then
+        xd = game.Workspace.Monsters.DragonBall
+    elseif playerplace == 5 then
+        xd = game.Workspace.Monsters.HxH
+    elseif playerplace == 6 then
+        xd = game.Workspace.Monsters.AOT
+    elseif playerplace == 7 then
+        xd = game.Workspace.Monsters.MHA
+    elseif playerplace == 8 then
+        xd = game.Workspace.Monsters.TokyoGhoul
+    elseif playerplace == 9 then
+        xd = game.Workspace.Monsters.Bleach
+    elseif playerplace == 10 then
+        xd = game.Workspace.Monsters.FairyTail
+    end
+end
+
+setXd()
+
+w:Button("Toggle Kill Aura", function()
+    killAuraEnabled = not killAuraEnabled
+    if not killAuraEnabled then
+        getgenv().g = false
+    end
+    while killAuraEnabled do
+        wait()
+        for i, v in pairs(xd:GetChildren()) do
+            if (v.RootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 500 then
+                game.ReplicatedStorage.RemoteEvents.MonsterRemote:FireServer("AttackMonsterByFollow", v, game.Workspace.FollowModels["FollowModels_" .. player.CharacterAppearanceId]["F001_" .. player.CharacterAppearanceId])
+            end
+        end
+    end
+end)
+
+w:Button("Toggle Kill Aura 2", function()
+    killAura2Enabled = not killAura2Enabled
+    if not killAura2Enabled then
+        getgenv().e = false
+    end
+    while killAura2Enabled do
+        wait()
+        for i, v in pairs(xd:GetChildren()) do
+            if (v.RootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 500 then
+                game.ReplicatedStorage.RemoteEvents.MonsterRemote:FireServer("AttackMonsterByFollow", v, game.Workspace.FollowModels["FollowModels_" .. player.CharacterAppearanceId]["F002_" .. player.CharacterAppearanceId])
+            end
+        end
+    end
+end)
+
+w:Button("Toggle Kill Aura 3", function()
+    killAura3Enabled = not killAura3Enabled
+    if not killAura3Enabled then
+        getgenv().pp = false
+    end
+    while killAura3Enabled do
+        wait()
+        for i, v in pairs(xd:GetChildren()) do
+            if (v.RootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 500 then
+                    game.ReplicatedStorage.RemoteEvents.MonsterRemote:FireServer("AttackMonsterByFollow", v, game.Workspace.FollowModels["FollowModels_" .. player.CharacterAppearanceId]["F003_" .. player.CharacterAppearanceId])
+            end
+        end
+    end
+end)
+
+w:Button("auto sell", function()
+    autoSellEnabled = not autoSellEnabled
+    if not autoSellEnabled then
+        getgenv().ss = false
+    end
+
+    while autoSellEnabled do
+        wait()
+        for i, v in pairs(xd:GetChildren()) do
+            if (v.RootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude <= 500 then
+                game.ReplicatedStorage.RemoteEvents.MonsterRemote:FireServer("SellMonster", v, false)
+            end
+        end
+    end
+end)
+
+w:Toggle("claim near", function(value)
+getgenv().h = value
+while getgenv().h do
+wait()
+       for i, v in pairs(xd:GetChildren()) do
+    if (v.RootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 20 then
+game.ReplicatedStorage.RemoteEvents.MonsterRemote:FireServer("BuyRoleByMoney", v, "CoinNum")
+end
+end
+end
+end)
