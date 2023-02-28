@@ -1,0 +1,56 @@
+--locals
+local remote = game.ReplicatedStorage.Remote
+local type = "Open1"
+local picker = "Health"
+local egghatch = "1"
+
+--gui
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("KMTSP by Azn", "Synapse")
+local Tab = Window:NewTab("Main")
+local Section = Tab:NewSection("Main")
+
+Section:NewToggle("Auto ATK", "attacks", function(value)
+getgenv().atk = value
+while getgenv().atk do
+    task.wait()
+    for i = 1, 5 do
+    remote.Weapon.TakeDamage:FireServer()
+end
+end
+end)
+
+Section:NewButton("Hug Princess", "Hug", function()
+    remote.Princess.PrincessHug:FireServer(true)
+end)
+
+Section:NewButton("No Princess", "No hug", function()
+    remote.Princess.PrincessHug:FireServer(false)
+end)
+Section:NewButton("Equip Best", "equips best", function()
+    remote.Weapon.EquipBest:FireServer()
+end)
+
+
+-- tab3
+local Tab3 = Window:NewTab("Stats")
+local Section3 = Tab3:NewSection("Stats")
+Section3:NewDropdown("Pick Stats", "stats to", {"Health", "Attack", "Speed", "Luck"}, function(sts)
+    picker = sts 
+end)
+
+Section3:NewToggle("Auto Upgrade", "upgrade", function(value)
+    getgenv().up = value
+    while getgenv().up do
+        task.wait(.4)
+        remote.Profile.AddPoint:FireServer(picker)
+    end
+end)
+
+Section3:NewSlider("Speed Changer", "ya", 80, 30, function(s)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
+end)
+
+Section3:NewButton("Rejoin", "Click to rejoin", function()
+    game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+end)
