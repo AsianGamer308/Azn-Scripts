@@ -1,3 +1,5 @@
+
+
 --locals
 local remote = game.ReplicatedStorage.Remote
 local type = "Open1"
@@ -20,6 +22,21 @@ end
 end
 end)
 
+Section:NewToggle("Bring Enemies", "brings", function(value)
+getgenv().bri = value
+while getgenv().bri do
+    task.wait()
+    pcall(function()
+local reg = game:GetService("Players").LocalPlayer.stats["Battle Region"].Value
+local chara = game.Players.LocalPlayer.Character.HumanoidRootPart
+for i, enemy in pairs(game:GetService("Workspace").Waves[reg].Enemy:GetChildren()) do
+    enemy.HumanoidRootPart.CFrame = CFrame.new(chara.Position + chara.CFrame.LookVector * 5)
+end
+end)
+end
+end)
+
+
 Section:NewButton("Hug Princess", "Hug", function()
     remote.Princess.PrincessHug:FireServer(true)
 end)
@@ -35,7 +52,7 @@ end)
 -- tab3
 local Tab3 = Window:NewTab("Stats")
 local Section3 = Tab3:NewSection("Stats")
-Section3:NewDropdown("Pick Stats", "stats to", {"Health", "Attack", "Speed", "Luck"}, function(sts)
+Section3:NewDropdown("Pick Stats", "stats to", {"Health", "Attack", "Luck"}, function(sts)
     picker = sts 
 end)
 
