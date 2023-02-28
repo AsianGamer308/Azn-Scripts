@@ -1,10 +1,5 @@
-
-
 --locals
 local remote = game.ReplicatedStorage.Remote
-local type = "Open1"
-local picker = "Health"
-local egghatch = "1"
 
 --gui
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
@@ -13,29 +8,28 @@ local Tab = Window:NewTab("Main")
 local Section = Tab:NewSection("Main")
 
 Section:NewToggle("Auto ATK", "attacks", function(value)
-getgenv().atk = value
-while getgenv().atk do
-    task.wait()
-    for i = 1, 5 do
-    remote.Weapon.TakeDamage:FireServer()
-end
-end
+    getgenv().atk = value
+    while getgenv().atk do
+        task.wait()
+        for i = 1, 5 do
+            remote.Weapon.TakeDamage:FireServer()
+        end
+    end
 end)
 
 Section:NewToggle("Bring Enemies", "brings", function(value)
-getgenv().bri = value
-while getgenv().bri do
-    task.wait()
-    pcall(function()
-local reg = game:GetService("Players").LocalPlayer.stats["Battle Region"].Value
-local chara = game.Players.LocalPlayer.Character.HumanoidRootPart
-for i, enemy in pairs(game:GetService("Workspace").Waves[reg].Enemy:GetChildren()) do
-    enemy.HumanoidRootPart.CFrame = CFrame.new(chara.Position + chara.CFrame.LookVector * 5)
-end
+    getgenv().bri = value
+    while getgenv().bri do
+        task.wait()
+        pcall(function()
+            local reg = game.Players.LocalPlayer.stats["Battle Region"].Value
+            local chara = game.Players.LocalPlayer.Character.HumanoidRootPart
+            for i, enemy in pairs(game.Workspace.Waves[reg].Enemy:GetChildren()) do
+                enemy.HumanoidRootPart.CFrame = CFrame.new(chara.Position + chara.CFrame.LookVector * 5)
+            end
+        end)
+    end
 end)
-end
-end)
-
 
 Section:NewButton("Hug Princess", "Hug", function()
     remote.Princess.PrincessHug:FireServer(true)
@@ -44,23 +38,24 @@ end)
 Section:NewButton("No Princess", "No hug", function()
     remote.Princess.PrincessHug:FireServer(false)
 end)
+
 Section:NewButton("Equip Best", "equips best", function()
     remote.Weapon.EquipBest:FireServer()
 end)
 
-
 -- tab3
 local Tab3 = Window:NewTab("Stats")
 local Section3 = Tab3:NewSection("Stats")
+
 Section3:NewDropdown("Pick Stats", "stats to", {"Health", "Attack", "Luck"}, function(sts)
-    picker = sts 
+    getgenv().picker = sts 
 end)
 
 Section3:NewToggle("Auto Upgrade", "upgrade", function(value)
     getgenv().up = value
     while getgenv().up do
         task.wait(.4)
-        remote.Profile.AddPoint:FireServer(picker)
+        remote.Profile.AddPoint:FireServer(getgenv().picker)
     end
 end)
 
