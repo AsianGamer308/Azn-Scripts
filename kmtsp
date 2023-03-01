@@ -1,5 +1,6 @@
 --locals
 local remote = game.ReplicatedStorage.Remote
+local i = 1
 
 --gui
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
@@ -10,11 +11,15 @@ local Section = Tab:NewSection("Main")
 Section:NewToggle("Auto ATK", "attacks", function(value)
     getgenv().atk = value
     while getgenv().atk do
-        task.wait(.003)
-        for i = 1, 5 do
+        task.wait()
+        for j = 1, i do
             remote.Weapon.TakeDamage:FireServer()
         end
     end
+end)
+
+Section:NewSlider("auto atk multiplier", "might lag", 10, 1, function(value)
+    i = value 
 end)
 
 Section:NewToggle("Bring Enemies", "brings", function(value)
