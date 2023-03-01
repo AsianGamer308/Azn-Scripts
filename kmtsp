@@ -29,7 +29,7 @@ Section:NewToggle("Bring Enemies", "brings", function(value)
         pcall(function()
             local reg = game.Players.LocalPlayer.stats["Battle Region"].Value
             local chara = game.Players.LocalPlayer.Character.HumanoidRootPart
-            for i, enemy in pairs(game.Workspace.Waves[reg].Enemy:GetChildren()) do
+            for p, enemy in pairs(game.Workspace.Waves[reg].Enemy:GetChildren()) do
                 enemy.HumanoidRootPart.CFrame = CFrame.new(chara.Position + chara.CFrame.LookVector * 5)
             end
         end)
