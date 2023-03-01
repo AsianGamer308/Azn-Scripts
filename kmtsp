@@ -10,7 +10,7 @@ local Section = Tab:NewSection("Main")
 Section:NewToggle("Auto ATK", "attacks", function(value)
     getgenv().atk = value
     while getgenv().atk do
-        task.wait()
+        task.wait(.003)
         for i = 1, 5 do
             remote.Weapon.TakeDamage:FireServer()
         end
