@@ -150,7 +150,7 @@ local Slider =
     Tab:CreateSlider(
     {
         Name = "Change Nearest Value",
-        Range = {0, 100},
+        Range = {0, 200},
         Increment = 5,
         Suffix = "Distance",
         CurrentValue = 50,
@@ -188,6 +188,13 @@ local Button = Tab2:CreateButton({
    Name = "TP To StoryQuest",
    Callback = function()
        p.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Camera.StoryMarker1.CFrame
+   end,
+})
+
+local Button = Tab2:CreateButton({
+   Name = "TP To SideQuest",
+   Callback = function()
+       p.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Camera.QuestMarker1.CFrame
    end,
 })
 
@@ -295,7 +302,7 @@ local Slider =
     Tab2:CreateSlider(
     {
         Name = "Change Nearest Value",
-        Range = {0, 100},
+        Range = {0, 200},
         Increment = 5,
         Suffix = "Distance",
         CurrentValue = 50,
