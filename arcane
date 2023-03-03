@@ -127,6 +127,7 @@ local Toggle =
             getgenv().ptp = Value
             while getgenv().ptp do
                 task.wait()
+                pcall(function()
                 for i, v in pairs(plys:GetPlayers()) do
                     if v ~= plys.LocalPlayer then
                         if
@@ -139,6 +140,7 @@ local Toggle =
                         end
                     end
                 end
+                end)
             end
         end
     }
@@ -181,6 +183,14 @@ local Dropdown =
 
 local Tab2 = Window:CreateTab("For NPCS", 4483362458)
 local Section = Tab2:CreateSection("NPCS Kill Aura")
+
+local Button = Tab2:CreateButton({
+   Name = "TP To StoryQuest",
+   Callback = function()
+       p.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Camera.StoryMarker1.CFrame
+   end,
+})
+
 local Toggle =
     Tab2:CreateToggle(
     {
@@ -267,6 +277,7 @@ local Toggle =
             getgenv().npctp = Value
             while getgenv().npctp do
                 wait()
+                pcall(function()
                 for i, v in pairs(enemy:GetChildren()) do
                     if (v.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <= NpcMag then
                         if v.Attributes.Health.Value > 0 then
@@ -274,7 +285,8 @@ local Toggle =
                         end
                     end
                 end
-            end
+                end)
+        end
         end
     }
 )
