@@ -1,0 +1,10 @@
+repeat wait() until game:IsLoaded() 
+if game.GameId == 1180269832 then -- arcane odyssey
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/arcane"))()
+elseif game.GameId == 3616534266 then -- all of us are dead
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/animeartifacts"))()
+elseif game.GameId == 4012406005 then -- strong anime squad
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/sass"))()
+elseif game.GameId == 3266192001 then -- kmtsp
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/kmtsp"))()
+end
