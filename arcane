@@ -1,0 +1,295 @@
+local p = game.Players.LocalPlayer
+local re = game.ReplicatedStorage.RS.Remotes.Combat
+local enemy = game:GetService("Workspace").Enemies
+local plys = game:GetService("Players")
+local Pmag = 50
+local NpcMag = 50
+local PlayerTable = {}
+local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source"))()
+local Window =
+    Rayfield:CreateWindow(
+    {
+        Name = "Arcane Odyssey Script By Azn",
+        LoadingTitle = "Rayfield Interface Suite",
+        LoadingSubtitle = "by Sirius",
+        ConfigurationSaving = {
+            Enabled = false,
+            FolderName = nil,
+            FileName = "poop"
+        },
+        KeySystem = false
+    }
+)
+
+local Tab = Window:CreateTab("For Players", 4483362458)
+local Section = Tab:CreateSection("Players Kill Aura")
+local Button = Tab:CreateButton({
+   Name = "Kirito Esp",
+   Callback = function()
+       local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/kiriotesp"))()
+       ESP:Toggle(true)
+   end,
+})
+        
+local Toggle =
+    Tab:CreateToggle(
+    {
+        Name = "Melee Kill Aura",
+        CurrentValue = false,
+        Flag = "Toggle1",
+        Callback = function(Value)
+            getgenv().g = Value
+            while getgenv().g do
+                wait()
+                pcall(
+                    function()
+                        for i, v in pairs(plys:GetPlayers()) do
+                            if v ~= plys.LocalPlayer then
+                                if
+                                    (v.Character.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <=
+                                        50
+                                 then
+                                    if v.Character.Humanoid.Health > 0 then
+                                        local tool = p.Character:FindFirstChildOfClass("Tool").Name
+                                        local args = {
+                                            [1] = p.Character:FindFirstChild(tool),
+                                            [3] = Vector3.new(p.Character.HumanoidRootPart.CFrame)
+                                        }
+                                        re.UseMelee:FireServer(unpack(args))
+                                        re.DealStrengthDamage:FireServer(
+                                            0,
+                                            p.Character,
+                                            v.Character,
+                                            p.Character:FindFirstChild(tool),
+                                            "Attack"
+                                        )
+                                    end
+                                end
+                            end
+                        end
+                    end
+                )
+            end
+        end
+    }
+)
+
+local Toggle =
+    Tab:CreateToggle(
+    {
+        Name = "Weapon Kill Aura",
+        CurrentValue = false,
+        Flag = "Toggle2",
+        Callback = function(Value)
+            getgenv().w = Value
+            while getgenv().w do
+                pcall(
+                    function()
+                        wait()
+                        for i, v in pairs(plys:GetPlayers()) do
+                            if v ~= plys.LocalPlayer then
+                                if
+                                    (v.Character.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <=
+                                        50
+                                 then
+                                    if v.Character.Humanoid.Health > 0 then
+                                        local tool = p.Character:FindFirstChildOfClass("Tool").Name
+                                        local args = {
+                                            [1] = p.Character:FindFirstChild(tool),
+                                            [3] = Vector3.new(p.Character.HumanoidRootPart.CFrame)
+                                        }
+                                        re.UseWeapon:FireServer(unpack(args))
+                                        re.DealWeaponDamage:FireServer(
+                                            0,
+                                            p.Character,
+                                            v.Character,
+                                            p.Character:FindFirstChild(tool),
+                                            "Slash"
+                                        )
+                                    end
+                                end
+                            end
+                        end
+                    end
+                )
+            end
+        end
+    }
+)
+
+local Toggle =
+    Tab:CreateToggle(
+    {
+        Name = "Tp Nearest Player",
+        CurrentValue = false,
+        Flag = "Toggle3",
+        Callback = function(Value)
+            getgenv().ptp = Value
+            while getgenv().ptp do
+                task.wait()
+                for i, v in pairs(plys:GetPlayers()) do
+                    if v ~= plys.LocalPlayer then
+                        if
+                            (v.Character.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <=
+                                Pmag
+                         then
+                            if v.Character.Humanoid.Health > 0 then
+                                p.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    }
+)
+
+local Slider =
+    Tab:CreateSlider(
+    {
+        Name = "Change Nearest Value",
+        Range = {0, 100},
+        Increment = 5,
+        Suffix = "Distance",
+        CurrentValue = 50,
+        Flag = "Slider1",
+        Callback = function(Value)
+            Pmag = Value
+        end
+    }
+)
+
+for _, player in pairs(plys:GetPlayers()) do
+    if player ~= p then
+        table.insert(PlayerTable, player.Name)
+    end
+end
+table.sort(PlayerTable)
+local Dropdown =
+    Tab:CreateDropdown(
+    {
+        Name = "Pick Player to Tp To",
+        Options = PlayerTable,
+        CurrentOption = PlayerTable[1],
+        Flag = "Dropdown1",
+        Callback = function(Option)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                game.Players[Option].Character.HumanoidRootPart.CFrame
+        end
+    }
+)
+
+local Tab2 = Window:CreateTab("For NPCS", 4483362458)
+local Section = Tab2:CreateSection("NPCS Kill Aura")
+local Toggle =
+    Tab2:CreateToggle(
+    {
+        Name = "Melee Kill Aura",
+        CurrentValue = false,
+        Flag = "Toggle4",
+        Callback = function(Value)
+            getgenv().m = Value
+            while getgenv().m do
+                wait()
+                pcall(
+                    function()
+                        for i, v in pairs(enemy:GetChildren()) do
+                            if (v.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <= 20 then
+                                if v.Attributes.Health.Value > 0 then
+                                    local tool = p.Character:FindFirstChildOfClass("Tool").Name
+                                    local args = {
+                                        [1] = p.Character:FindFirstChild(tool),
+                                        [3] = Vector3.new(p.Character.HumanoidRootPart.CFrame)
+                                    }
+                                    re.UseMelee:FireServer(unpack(args))
+                                    re.DealStrengthDamage:FireServer(
+                                        0,
+                                        p.Character,
+                                        v,
+                                        p.Character:FindFirstChild(tool),
+                                        "Attack"
+                                    )
+                                end
+                            end
+                        end
+                    end
+                )
+            end
+        end
+    }
+)
+
+local Toggle =
+    Tab2:CreateToggle(
+    {
+        Name = "Weapon Kill Aura",
+        CurrentValue = false,
+        Flag = "Toggle5",
+        Callback = function(Value)
+            getgenv().wp = Value
+            while getgenv().wp do
+                wait()
+                pcall(
+                    function()
+                        for i, v in pairs(enemy:GetChildren()) do
+                            if (v.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <= 20 then
+                                if v.Attributes.Health.Value > 0 then
+                                    local tool = p.Character:FindFirstChildOfClass("Tool").Name
+                                    local args = {
+                                        [1] = p.Character:FindFirstChild(tool),
+                                        [3] = Vector3.new(p.Character.HumanoidRootPart.CFrame)
+                                    }
+                                    re.UseWeapon:FireServer(unpack(args))
+                                    re.DealWeaponDamage:FireServer(
+                                        0,
+                                        p.Character,
+                                        v,
+                                        p.Character:FindFirstChild(tool),
+                                        "Slash"
+                                    )
+                                end
+                            end
+                        end
+                    end
+                )
+            end
+        end
+    }
+)
+
+local Toggle =
+    Tab2:CreateToggle(
+    {
+        Name = "Tp To Nearest Npc",
+        CurrentValue = false,
+        Flag = "Toggle5",
+        Callback = function(Value)
+            getgenv().npctp = Value
+            while getgenv().npctp do
+                wait()
+                for i, v in pairs(enemy:GetChildren()) do
+                    if (v.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <= NpcMag then
+                        if v.Attributes.Health.Value > 0 then
+                            p.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
+                        end
+                    end
+                end
+            end
+        end
+    }
+)
+
+local Slider =
+    Tab2:CreateSlider(
+    {
+        Name = "Change Nearest Value",
+        Range = {0, 100},
+        Increment = 5,
+        Suffix = "Distance",
+        CurrentValue = 50,
+        Flag = "Slider2",
+        Callback = function(Value)
+            NpcMag = Value
+        end
+    }
+)
