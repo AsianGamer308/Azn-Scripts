@@ -8,6 +8,18 @@ local FollowModels = workspace.FollowModels:FindFirstChild('FollowModels_' .. pl
 local Monsters = workspace.Monsters
 local Toggles = {}
 
+w:Toggle("Turn this on", function(value)
+getgenv().ggg = value
+while getgenv().ggg do
+        task.wait(.2)
+for _, child in ipairs(FollowModels:GetChildren()) do
+    local humanoidRootPart = child:FindFirstChild("HumanoidRootPart")
+    if humanoidRootPart then
+        humanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame
+    end
+end
+end
+end)
 w:Toggle("Toggle Kill Aura", function(a)
     Toggles.KillAura = a
     while Toggles.KillAura do
@@ -15,15 +27,14 @@ w:Toggle("Toggle Kill Aura", function(a)
             if v:IsA('Model') then
                 for i,v in next, v:GetChildren() do
                     if v:IsA('Model') and v.Name:find('MonsterModel') and v:FindFirstChild('RootPart') and v.MonsterHp.Value > 0 then
-                        for i = 1,5 do
+                        player.Character.HumanoidRootPart.CFrame = v.RootPart.CFrame
                             for i2,v2 in next, FollowModels:GetChildren() do
                                 MonsterRemote:FireServer("AttackMonsterByFollow", v, v2)
                             end
-                        end
                     end
                 end
             end
-            task.wait(.2)
+            task.wait()
         end
     end
 end)
