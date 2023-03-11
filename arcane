@@ -398,7 +398,7 @@ local Slider =
     }
 )
 
-local Toggle =
+local Toggle88 =
     Tab3:CreateToggle(
     {
         Name = "TP Walk",
@@ -441,7 +441,7 @@ local function ToggleNoclip(value)
     end
 end
 
-local Toggle =
+local Toggle23 =
     Tab3:CreateToggle(
     {
         Name = "Noclip",
@@ -453,7 +453,7 @@ local Toggle =
     }
 )
 
-local Toggle =
+local Toggle555 =
     Tab3:CreateToggle(
     {
         Name = "Inf Jump",
