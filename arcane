@@ -473,7 +473,7 @@ uis.InputBegan:Connect(
             return
         end
         if input.KeyCode == Enum.KeyCode.Space then
-            if Toggle.CurrentValue then
+            if Toggle555.CurrentValue then
                 isJumping = true
             end
         end
@@ -487,7 +487,7 @@ uis.InputBegan:Connect(
 
         while true do
             task.wait()
-            if isJumping and Toggle.CurrentValue then
+            if isJumping and Toggle555.CurrentValue then
                 task.wait()
                 game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping") -- Change jump state
             end
