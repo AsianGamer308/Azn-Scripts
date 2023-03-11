@@ -2,6 +2,25 @@ local p = game.Players.LocalPlayer
 local re = game.ReplicatedStorage.RS.Remotes.Combat
 local enemy = game:GetService("Workspace").Enemies
 local plys = game:GetService("Players")
+local PlaceTable = {}
+local uis = game:GetService("UserInputService")
+local fishRemote = game.ReplicatedStorage.RS.Remotes.Misc.FishState
+local map = game:GetService("Workspace").Map
+local ignoreplace = {
+    "Fragmentable",
+    "Foam",
+    "EnemySpawns",
+    "Interactable",
+    "IslandCloud",
+    "QuestObjects",
+    "SeaContent",
+    "StoryObjects",
+    "Temporary",
+    "Weather"
+}
+local fishpos
+local tpspeed = 50
+local isJumping = false
 local Pmag = 50
 local NpcMag = 50
 local PlayerTable = {}
@@ -23,14 +42,7 @@ local Window =
 
 local Tab = Window:CreateTab("For Players", 4483362458)
 local Section = Tab:CreateSection("Players Kill Aura")
-local Button = Tab:CreateButton({
-   Name = "Kirito Esp",
-   Callback = function()
-       local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/kiriotesp"))()
-       ESP:Toggle(true)
-   end,
-})
-        
+
 local Toggle =
     Tab:CreateToggle(
     {
@@ -127,20 +139,22 @@ local Toggle =
             getgenv().ptp = Value
             while getgenv().ptp do
                 task.wait()
-                pcall(function()
-                for i, v in pairs(plys:GetPlayers()) do
-                    if v ~= plys.LocalPlayer then
-                        if
-                            (v.Character.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <=
-                                Pmag
-                         then
-                            if v.Character.Humanoid.Health > 0 then
-                                p.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+                pcall(
+                    function()
+                        for i, v in pairs(plys:GetPlayers()) do
+                            if v ~= plys.LocalPlayer then
+                                if
+                                    (v.Character.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <=
+                                        Pmag
+                                 then
+                                    if v.Character.Humanoid.Health > 0 then
+                                        p.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+                                    end
+                                end
                             end
                         end
                     end
-                end
-                end)
+                )
             end
         end
     }
@@ -167,6 +181,7 @@ for _, player in pairs(plys:GetPlayers()) do
     end
 end
 table.sort(PlayerTable)
+
 local Dropdown =
     Tab:CreateDropdown(
     {
@@ -184,19 +199,25 @@ local Dropdown =
 local Tab2 = Window:CreateTab("For NPCS", 4483362458)
 local Section = Tab2:CreateSection("NPCS Kill Aura")
 
-local Button = Tab2:CreateButton({
-   Name = "TP To StoryQuest",
-   Callback = function()
-       p.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Camera.StoryMarker1.CFrame
-   end,
-})
+local Button =
+    Tab2:CreateButton(
+    {
+        Name = "TP To StoryQuest",
+        Callback = function()
+            p.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Camera.StoryMarker1.CFrame
+        end
+    }
+)
 
-local Button = Tab2:CreateButton({
-   Name = "TP To SideQuest",
-   Callback = function()
-       p.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Camera.QuestMarker1.CFrame
-   end,
-})
+local Button =
+    Tab2:CreateButton(
+    {
+        Name = "TP To SideQuest",
+        Callback = function()
+            p.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Camera.QuestMarker1.CFrame
+        end
+    }
+)
 
 local Toggle =
     Tab2:CreateToggle(
@@ -284,16 +305,18 @@ local Toggle =
             getgenv().npctp = Value
             while getgenv().npctp do
                 wait()
-                pcall(function()
-                for i, v in pairs(enemy:GetChildren()) do
-                    if (v.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <= NpcMag then
-                        if v.Attributes.Health.Value > 0 then
-                            p.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
+                pcall(
+                    function()
+                        for i, v in pairs(enemy:GetChildren()) do
+                            if (v.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <= NpcMag then
+                                if v.Attributes.Health.Value > 0 then
+                                    p.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
+                                end
+                            end
                         end
                     end
-                end
-                end)
-        end
+                )
+            end
         end
     }
 )
@@ -309,6 +332,299 @@ local Slider =
         Flag = "Slider2",
         Callback = function(Value)
             NpcMag = Value
+        end
+    }
+)
+
+local Tab3 = Window:CreateTab("Misc", 4483362458)
+local Section = Tab3:CreateSection("Esp And Player stuff")
+
+local Button =
+    Tab3:CreateButton(
+    {
+        Name = "Kirito Esp",
+        Callback = function()
+            local ESP =
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/kiriotesp"))()
+            ESP:Toggle(true)
+        end
+    }
+)
+
+for _, place in pairs(map:GetChildren()) do
+    if place:IsA("Folder") and not table.find(ignoreplace, place.Name) then
+        table.insert(PlaceTable, place.Name)
+    end
+end
+table.sort(PlaceTable)
+
+local Dropdown =
+    Tab3:CreateDropdown(
+    {
+        Name = "Tp to Island",
+        Options = PlaceTable,
+        CurrentOption = PlaceTable[1],
+        Flag = "Dropdown123252",
+        Callback = function(pickplace)
+            p.Character.HumanoidRootPart.CFrame = map[pickplace].Center.CFrame * CFrame.new(0, 1500, 0)
+        end
+    }
+)
+
+local Slider =
+    Tab3:CreateSlider(
+    {
+        Name = "TpWalk Value ",
+        Range = {0, 100},
+        Increment = 5,
+        Suffix = "Speed",
+        CurrentValue = tpspeed,
+        Flag = "Slider2555",
+        Callback = function(Value)
+            tpspeed = Value
+        end
+    }
+)
+
+local Toggle =
+    Tab3:CreateToggle(
+    {
+        Name = "TP Walk",
+        CurrentValue = false,
+        Flag = "Toggle5555555",
+        Callback = function(Value)
+            tpwalking = Value
+            local chr = game.Players.LocalPlayer.Character
+            local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+            while tpwalking and chr and hum and hum.Parent do
+                local delta = game:GetService("RunService").Heartbeat:Wait()
+                if hum.MoveDirection.Magnitude > 0 then
+                    chr:TranslateBy(hum.MoveDirection * delta * tpspeed)
+                end
+            end
+        end
+    }
+)
+
+p.CharacterAdded:Connect(
+    function(char)
+        local hum = char:WaitForChild("Humanoid")
+        hum.MoveDirectionChanged:Connect(
+            function()
+                if not tpwalking then
+                    return
+                end
+                tpwalking = false
+            end
+        )
+    end
+)
+
+local function ToggleNoclip(value)
+    local character = game:GetService("Players").LocalPlayer.Character
+    for _, part in pairs(character:GetChildren()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = not value
+        end
+    end
+end
+
+local Toggle =
+    Tab3:CreateToggle(
+    {
+        Name = "Noclip",
+        CurrentValue = false,
+        Flag = "Toggle1gggsag",
+        Callback = function(value)
+            ToggleNoclip(value)
+        end
+    }
+)
+
+local Toggle =
+    Tab3:CreateToggle(
+    {
+        Name = "Inf Jump",
+        CurrentValue = false,
+        Flag = "Toggle1gggg",
+        Callback = function(Value)
+            if not Value then
+                isJumping = false
+            end
+        end
+    }
+)
+
+uis.InputBegan:Connect(
+    function(input, gameProcessed)
+        if gameProcessed then
+            return
+        end
+        if input.KeyCode == Enum.KeyCode.Space then
+            if Toggle.CurrentValue then
+                isJumping = true
+            end
+        end
+        uis.InputEnded:Connect(
+            function(input, gameProcessed)
+                if input.KeyCode == Enum.KeyCode.Space then
+                    isJumping = false
+                end
+            end
+        )
+
+        while true do
+            task.wait()
+            if isJumping and Toggle.CurrentValue then
+                task.wait()
+                game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping") -- Change jump state
+            end
+        end
+    end
+)
+
+local Tab4 = Window:CreateTab("Fishing", 4483362458)
+local Section = Tab4:CreateSection("Fishing Stuff")
+
+local dropdownrod = {}
+
+for _, item in ipairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+    if item:IsA("Tool") and string.find(item.Name, "Rod") then
+        table.insert(dropdownrod, item.Name)
+    end
+end
+
+local selectedRod = dropdownrod[1]
+
+if #dropdownrod > 0 then
+    local Dropdown2 =
+        Tab4:CreateDropdown(
+        {
+            Name = "Pick Rod to equip",
+            Options = dropdownrod,
+            CurrentOption = selectedRod,
+            Flag = "Dropdown12322",
+            Callback = function(option)
+                selectedRod = option
+            end
+        }
+    )
+end
+
+local Paragraph =
+    Tab4:CreateParagraph(
+    {
+        Title = "If you dont see dropdown for rods",
+        Content = "Re execute the script without holding the rod in hand also auto equips has 10 sec time so you don't get invisible rod glitch"
+    }
+)
+
+local Toggle =
+    Tab4:CreateToggle(
+    {
+        Name = "Auto Equip picked Rod",
+        CurrentValue = false,
+        Flag = "Togglesdg1",
+        Callback = function(value)
+            getgenv().equiprod = value
+            while getgenv().equiprod do
+                pcall(
+                    function()
+                        task.wait(.5)
+                        local character = p.Character or p.CharacterAdded:Wait()
+                        local tool = character:FindFirstChild(selectedRod)
+                        if tool then
+                        else
+                            if character.Humanoid.Health <= 0 then
+                                local equippedTool = character:FindFirstChildOfClass("Tool")
+                                if equippedTool and equippedTool.Name == selectedRod then
+                                    equippedTool.Parent = p.Backpack
+                                end
+                            end
+                            repeat
+                                task.wait()
+                            until not character or character.Humanoid.Health > 0
+                            task.wait(10)
+                            if not character then
+                                return
+                            end
+                            tool = p.Backpack:FindFirstChild(selectedRod)
+                            if tool then
+                                tool.Parent = character
+                            end
+                        end
+                    end
+                )
+            end
+        end
+    }
+)
+
+local Toggle =
+    Tab4:CreateToggle(
+    {
+        Name = "Auto Fish",
+        CurrentValue = false,
+        Flag = "Toggle1gsd",
+        Callback = function(Value)
+            getgenv().autofi = Value
+            while getgenv().autofi do
+                task.wait()
+                pcall(
+                    function()
+                        local tool = p.Character:FindFirstChildOfClass("Tool").Name
+                        if not p.Character:FindFirstChild("FishClock") then
+                            game.ReplicatedStorage.RS.Remotes.Misc.ToolAction:FireServer(
+                                p.Character:FindFirstChild(tool)
+                            )
+                            task.wait(2)
+                        end
+                        if p.Character:FindFirstChild("FishBiteProgress") then
+                            fishRemote:FireServer("Reel")
+                        end
+                    end
+                )
+            end
+        end
+    }
+)
+
+local Paragraph =
+    Tab4:CreateParagraph(
+    {
+        Title = "You don't have to use this",
+        Content = "but I recommend using it since game pushes you back a little after each time you fish and also if you die from hungry or something."
+    }
+)
+
+local Button =
+    Tab4:CreateButton(
+    {
+        Name = "Set Fishing Pos",
+        Callback = function()
+            fishpos = p.Character.HumanoidRootPart.CFrame
+        end
+    }
+)
+
+local Toggle =
+    Tab4:CreateToggle(
+    {
+        Name = "TP to Fishing Pos",
+        CurrentValue = false,
+        Flag = "Toggle1sadasda",
+        Callback = function(Value)
+            getgenv().tpfis = Value
+            while getgenv().tpfis do
+                task.wait(.5)
+                pcall(
+                    function()
+                        if fishpos then
+                            p.Character.HumanoidRootPart.CFrame = fishpos
+                        end
+                    end
+                )
+            end
         end
     }
 )
