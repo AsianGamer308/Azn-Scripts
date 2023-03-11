@@ -342,6 +342,18 @@ local Section = Tab3:CreateSection("Esp And Player stuff")
 local Button =
     Tab3:CreateButton(
     {
+        Name = "Unlock All Island",
+        Callback = function()
+            for i,v in pairs(map:GetChildren()) do
+            game.ReplicatedStorage.RS.Remotes.Misc.UpdateLastSeen:FireServer(v.Name, "")
+            end
+        end
+    }
+)
+
+local Button =
+    Tab3:CreateButton(
+    {
         Name = "Kirito Esp",
         Callback = function()
             local ESP =
