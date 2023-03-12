@@ -432,26 +432,6 @@ p.CharacterAdded:Connect(
     end
 )
 
-local function ToggleNoclip(value)
-    local character = game:GetService("Players").LocalPlayer.Character
-    for _, part in pairs(character:GetChildren()) do
-        if part:IsA("BasePart") then
-            part.CanCollide = not value
-        end
-    end
-end
-
-local Toggle23 =
-    Tab3:CreateToggle(
-    {
-        Name = "Noclip",
-        CurrentValue = false,
-        Flag = "Toggle1gggsag",
-        Callback = function(value)
-            ToggleNoclip(value)
-        end
-    }
-)
 
 local Toggle555 =
     Tab3:CreateToggle(
