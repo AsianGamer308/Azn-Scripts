@@ -3,6 +3,18 @@ local w = Library:Window("Main")
 local lp = game.Players.LocalPlayer
 local remote = game.ReplicatedStorage.Packages.Knit.Services
 local targetPosition = nil
+
+w:Toggle(
+    "equip best",
+    function(value)
+        getgenv().ok = value
+        while getgenv().ok do
+            task.wait(.5)
+            remote.WeaponInvService.RF.EquipBest:InvokeServer()
+        end
+    end
+)
+
 w:Toggle(
     "Kill aura",
     function(value)
