@@ -1,0 +1,130 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/lime"))()
+local w = Library:Window("Main")
+local lp = game.Players.LocalPlayer
+local remote = game.ReplicatedStorage.Packages.Knit.Services
+local targetPosition = nil
+w:Toggle(
+    "Kill aura",
+    function(value)
+        getgenv().ok = value
+        while getgenv().ok do
+            task.wait()
+            local hasTarget = false
+            for i, v in pairs(game:GetService("Workspace").Live.NPCs.Client:GetChildren()) do
+                if
+                    v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and
+                        (v.HumanoidRootPart.Position - lp.Character.HumanoidRootPart.Position).Magnitude <= 30
+                 then
+                    hasTarget = true
+                    remote.ClickService.RF.Click:InvokeServer(v.Name)
+                end
+            end
+            if not hasTarget then
+                remote.ClickService.RF.Click:InvokeServer()
+            end
+        end
+    end
+)
+
+w:Toggle(
+    "collect",
+    function(value)
+        getgenv().s = value
+        while getgenv().s do
+            task.wait()
+            for i, v in pairs(game:GetService("Workspace").Live.Pickups:GetChildren()) do
+                v.CFrame = lp.Character.HumanoidRootPart.CFrame
+            end
+        end
+    end
+)
+
+w:Toggle(
+    "auto tp",
+    function(value)
+        getgenv().t = value
+        while getgenv().t do
+            task.wait()
+            local closestNPC = nil
+            local closestDist = math.huge
+            for i, v in pairs(game:GetService("Workspace").Live.NPCs.Client:GetChildren()) do
+                local dist = (v.HumanoidRootPart.Position - targetPosition).Magnitude
+                if dist <= 500 and dist < closestDist then
+                    closestNPC = v
+                    closestDist = dist
+                end
+            end
+            if closestNPC then
+                lp.Character.HumanoidRootPart.CFrame = closestNPC.HumanoidRootPart.CFrame * CFrame.new(0, -10, -9)
+            else
+                lp.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+            end
+        end
+    end
+)
+
+w:Button(
+    "set tp position",
+    function()
+        targetPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+    end
+)
+w:Toggle(
+    "auto get quest",
+    function(value)
+        getgenv().ques = value
+        while getgenv().ques do
+            task.wait(.5)
+            for i, v in pairs(workspace.Resources.QuestDummy:GetChildren()) do
+                game.ReplicatedStorage.Packages.Knit.Services.QuestService.RF.ActionQuest:InvokeServer(v.Name)
+            end
+        end
+    end
+)
+
+w:Toggle(
+    "auto Ascend",
+    function(value)
+        getgenv().as = value
+        while getgenv().as do
+            task.wait()
+            if
+                game:GetService("Players").LocalPlayer.PlayerGui.LeftSidebar.Background.Frame.BottomButtons.Ascend.ReadyLabel.Visible ==
+                    true
+             then
+                game.ReplicatedStorage.Packages.Knit.Services.AscendService.RF.Ascend:InvokeServer()
+            end
+        end
+    end
+)
+
+local w2 = Library:Window("LocalPlayer")
+
+w2:Button(
+    "tp to position",
+    function()
+        lp.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+    end
+)
+
+w2:Toggle(
+    "hide username",
+    function(value)
+        getgenv().na = value
+        while getgenv().na do
+            task.wait()
+            pcall(
+                function()
+                    lp.Character.UpperTorso.PlayerTag:Destroy()
+                end
+            )
+        end
+    end
+)
+
+w2:Button(
+    "rejoin",
+    function()
+        game:GetService("TeleportService"):Teleport(game.PlaceId, lp)
+    end
+)
