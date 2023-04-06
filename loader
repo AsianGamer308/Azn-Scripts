@@ -1,3 +1,7 @@
+for i, v in next, getconnections(game.Players.LocalPlayer.Idled) do -- antiafk
+v:Disable();
+end;
+
 repeat wait() until game:IsLoaded() 
 if     game.GameId == 1180269832 then -- arcane odyssey
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/arcane"))()
