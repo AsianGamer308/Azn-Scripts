@@ -67,7 +67,7 @@ w:Toggle(
                 end
             end
             if closestNPC then
-                lp.Character.HumanoidRootPart.CFrame = closestNPC.HumanoidRootPart.CFrame * CFrame.new(0, -10, -9)
+                lp.Character.HumanoidRootPart.CFrame = closestNPC.HumanoidRootPart.CFrame * CFrame.new(0, -7, -9)
             else
                 lp.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
             end
@@ -88,7 +88,7 @@ w:Toggle(
         while getgenv().ques do
             task.wait(.5)
             for i, v in pairs(workspace.Resources.QuestDummy:GetChildren()) do
-                game.ReplicatedStorage.Packages.Knit.Services.QuestService.RF.ActionQuest:InvokeServer(v.Name)
+                remote.QuestService.RF.ActionQuest:InvokeServer(v.Name)
             end
         end
     end
