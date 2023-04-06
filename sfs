@@ -7,8 +7,8 @@ local targetPosition = nil
 w:Toggle(
     "equip best",
     function(value)
-        getgenv().ok = value
-        while getgenv().ok do
+        getgenv().eb = value
+        while getgenv().eb do
             task.wait(.5)
             remote.WeaponInvService.RF.EquipBest:InvokeServer()
         end
