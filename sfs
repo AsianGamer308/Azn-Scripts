@@ -10,7 +10,10 @@ w:Toggle(
         getgenv().eb = value
         while getgenv().eb do
             task.wait(.5)
+            pcall(
+                function()
             remote.WeaponInvService.RF.EquipBest:InvokeServer()
+            end)
         end
     end
 )
@@ -21,6 +24,8 @@ w:Toggle(
         getgenv().ok = value
         while getgenv().ok do
             task.wait()
+            pcall(
+                function()
             local hasTarget = false
             for i, v in pairs(game:GetService("Workspace").Live.NPCs.Client:GetChildren()) do
                 if
@@ -34,6 +39,7 @@ w:Toggle(
             if not hasTarget then
                 remote.ClickService.RF.Click:InvokeServer()
             end
+            end)
         end
     end
 )
@@ -44,9 +50,12 @@ w:Toggle(
         getgenv().s = value
         while getgenv().s do
             task.wait()
+            pcall(
+                function()
             for i, v in pairs(game:GetService("Workspace").Live.Pickups:GetChildren()) do
                 v.CFrame = lp.Character.HumanoidRootPart.CFrame
             end
+            end)
         end
     end
 )
@@ -57,6 +66,8 @@ w:Toggle(
         getgenv().t = value
         while getgenv().t do
             task.wait()
+            pcall(
+                function()
             local closestNPC = nil
             local closestDist = math.huge
             for i, v in pairs(game:GetService("Workspace").Live.NPCs.Client:GetChildren()) do
@@ -71,6 +82,7 @@ w:Toggle(
             else
                 lp.Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
             end
+            end)
         end
     end
 )
@@ -87,9 +99,12 @@ w:Toggle(
         getgenv().ques = value
         while getgenv().ques do
             task.wait(.5)
+            pcall(
+                function()
             for i, v in pairs(workspace.Resources.QuestDummy:GetChildren()) do
                 remote.QuestService.RF.ActionQuest:InvokeServer(v.Name)
             end
+            end)
         end
     end
 )
@@ -100,12 +115,15 @@ w:Toggle(
         getgenv().as = value
         while getgenv().as do
             task.wait()
+            pcall(
+                function()
             if
                 game:GetService("Players").LocalPlayer.PlayerGui.LeftSidebar.Background.Frame.BottomButtons.Ascend.ReadyLabel.Visible ==
                     true
              then
                 game.ReplicatedStorage.Packages.Knit.Services.AscendService.RF.Ascend:InvokeServer()
-            end
+             end
+        end)
         end
     end
 )
