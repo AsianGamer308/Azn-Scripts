@@ -13,4 +13,6 @@ elseif game.GameId == 4012406005 then -- strong anime squad
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/sass"))()
 elseif game.GameId == 3266192001 then -- kmtsp
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/kmtsp"))()
+elseif game.GameId == 3525075510 then -- pm 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AsianGamer308/Azn-Scripts/main/pm"))()
 end
